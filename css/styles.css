@@ -1,0 +1,27 @@
+/* ConstructionServices — кастомные стили */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Manrope', system-ui, sans-serif;
+}
+
+/* Скрытие полосы прокрутки галереи */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Фокус для клавиатурной навигации (ссылки без своего focus-visible в разметке) */
+a:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Скрытие стрелки галереи на краю */
+.gallery-nav-hidden {
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0.5;
+}
