@@ -1,66 +1,65 @@
-# ConstructionServices
+# Nashmaster.pro
 
-Одностраничный сайт-визитка для строителя-отделочника: отделочный ремонт, сантехника, электрика.
+Одностраничный сайт-визитка: отделочный ремонт, сантехника, электрика.
+
+Публичный домен: **https://nashmaster.pro/** — при смене хостинга обновите **`canonical`**, **`og:url`**, **JSON-LD** (`url`) и **`siteUrl`** в `public/assets/js/site-config.js`.
 
 ## Технологии
 
-- **HTML5** — семантическая разметка
-- **Tailwind CSS** — стили (подключение через CDN)
-- **JavaScript** — мобильное меню, плавная прокрутка, галерея с прокруткой и управлением с клавиатуры
-- **Font Awesome** — иконки
-- **Google Fonts (Manrope)** — основной шрифт
+- **HTML5** — разметка
+- **Tailwind CSS** — через CDN (`cdn.tailwindcss.com`)
+- **Font Awesome 6** — иконки (CDN)
+- **JavaScript** — конфиг сайта, данные галереи/отзывов, UI (меню, якоря, галерея)
+- **Google Fonts (Manrope, Plus Jakarta Sans)** — шрифты
 
-## Структура проекта
+## Структура
+
+Корень репозитория — документация и CI. **Всё, что отдаётся на сайт, лежит в `public/`.** GitHub Actions деплоит только эту папку.
 
 ```
-ConstructionServicesWeb/
-  index.html      — главная страница
-  css/
-    styles.css    — кастомные стили (шрифт, скроллбар, фокус, галерея)
-  js/
-    script.js     — меню, плавная прокрутка, галерея
-  images/gallery/ — 10 фото WebP 3:4 (`01.webp` … `10.webp`), см. README в папке
-  images/max.svg   — иконка Max (контакты и плавающая кнопка)
-  .github/workflows/
-    static-gh-pages.yml — деплой статики на GitHub Pages (без Jekyll)
-  README.md
+public/
+  index.html
+  robots.txt          — индексация и ссылка на sitemap
+  sitemap.xml         — карта сайта (при крупных правках обновите `lastmod`)
+  CNAME               — кастомный домен для GitHub Pages (в файле: `nashmaster.pro`)
+  site.webmanifest
+  favicon.ico, favicon-*.png, apple-touch-icon.png, android-chrome-*.png
+  assets/
+    css/styles.css    — кастомные стили (layout, галерея, отзывы, FAB, цены)
+    js/
+      site-config.js  — телефон, мессенджеры, URL сайта, фон hero; `data-contact` в разметке
+      data.js         — слайды галереи и тексты отзывов
+      app.js          — рендер галереи/отзывов, меню, плавный скролл, стрелки галереи
+    images/           — max.svg, gallery/
 ```
 
-## Секции сайта
+Подключение в `public/index.html` (в конце `body`): **`assets/js/site-config.js` → `data.js` → `app.js`**.
 
-- **Навигация** — фиксированная шапка, логотип, ссылки, кнопка «Позвонить»; на мобильных — гамбургер-меню
-- **Hero** — заголовок, подзаголовок, кнопка «Связаться»; фон задаётся URL в атрибуте `style` секции `#hero` — тот же адрес продублируйте в `<meta property="og:image">` для превью в соцсетях
-- **Преимущества** — выезд на замер бесплатно, гарантия, многолетний опыт, понятная коммуникация
-- **Услуги** — три карточки: отделочный ремонт, сантехника, электрика
-- **Галерея** — 10 снимков WebP 3:4 из `images/gallery/`, горизонтальная прокрутка, стрелки и клавиатура
-- **Обо мне** — расширенный текст о мастере и формате работы
-- **Отзывы** — пять отзывов в бегущей строке (справа налево); при `prefers-reduced-motion` — статичная сетка
-- **Контакты** — телефон и ссылки Telegram, Max, Profi.ru, Mail.ru (в одном стиле карточек); **плавающая кнопка Max** справа снизу (`fixed`) ведёт на тот же URL, что карточка Max в `#contact`
+## Локальный просмотр
 
-## Как открыть
+Откройте **`public/index.html`** в браузере или поднимите статический сервер с корнем **`public/`**, например:
 
-1. Откройте `index.html` в браузере (двойной клик или «Открыть с помощью»).
-2. Либо запустите локальный сервер из корня проекта, например:
-   ```bash
-   npx serve .
-   ```
-   или
-   ```bash
-   python3 -m http.server 8000
-   ```
-   и перейдите по указанному адресу (например, http://localhost:8000).
+```bash
+cd public && python3 -m http.server 8080
+```
 
-## GitHub Pages
+Затем перейдите на `http://localhost:8080/`.
 
-Включите **Pages** в настройках репозитория (Source: GitHub Actions). При пуше в ветку `main` срабатывает workflow [`.github/workflows/static-gh-pages.yml`](.github/workflows/static-gh-pages.yml): выкладывается корень репозитория как статический сайт **без Jekyll** (как при локальном открытии `index.html`).
+## Правки контента и контактов
 
-## Перед публикацией
+- **Телефон, ссылки Telegram / Max / Mail, фон hero** — `public/assets/js/site-config.js` (объект `SITE`, глобально доступен как `window.__SITE_CONFIG`).
+- **Галерея и отзывы** — `public/assets/js/data.js` (`__GALLERY_ITEMS`, `__REVIEWS`).
+- В разметке ссылки помечены **`data-contact`** (`tel`, `telegram`, `max`, `mail`); отображаемый номер — элемент с **`data-contact-display="phone"`**.
 
-- Замените заглушки контактов в `index.html`: телефон, ссылки Telegram (`t.me/...`), Max, Profi.ru, Mail.ru. Ссылку Max обновите и в карточке контактов, и у плавающей кнопки внизу страницы.
-- Добавьте файлы `images/gallery/01.webp` … `10.webp` (см. [images/gallery/README.md](images/gallery/README.md)).
-- Добавьте файл `favicon.ico` в корень проекта (ссылка на него уже есть в `<head>`).
-- В `index.html` обновите **канонический URL** (`<link rel="canonical" ...>`) и поле `"url"` в JSON-LD, если используете другой домен или имя пользователя/репозитория на GitHub Pages (сейчас задано под `https://lrg1763.github.io/ConstructionServicesWeb/`).
+После смены телефона или домена обновите также **JSON-LD** в `public/index.html` (поля `telephone`, `url`), **canonical**, **og:image** при необходимости. Тексты **FAQ** на странице и блок **FAQPage** в JSON-LD должны совпадать.
 
-## Лицензия
+## SEO
 
-Проект создан в учебных/личных целях. Фото галереи — ваши WebP в `images/gallery/`; фон Hero — внешний URL в `index.html` (секция `#hero` + `og:image`).
+- В **`public/robots.txt`** указан `Sitemap: https://nashmaster.pro/sitemap.xml`.
+- После деплоя добавьте сайт в **[Яндекс.Вебмастер](https://webmaster.yandex.ru/)** и **[Google Search Console](https://search.google.com/search-console)** и укажите sitemap `https://nashmaster.pro/sitemap.xml`.
+- Для локального поиска полезны карточки **Яндекс.Бизнес** и **Google Business Profile** (оформляются вне репозитория).
+- Для соцсетей в мета-тегах используется изображение `https://nashmaster.pro/android-chrome-512x512.png`; при желании замените на отдельный баннер 1200×630 в `public/assets/images/` и обновите `og:image` / `twitter:image` в `index.html`.
+
+## Деплой
+
+Workflow **Deploy static site to GitHub Pages** выкладывает содержимое каталога **`public/`**. Для сайта **Nashmaster.pro** в настройках Pages укажите custom domain `nashmaster.pro` и при необходимости включите **Enforce HTTPS**.

@@ -1,0 +1,225 @@
+/* Nashmaster.pro — кастомные стили */
+
+/* Общая оболочка секций (= max-w-7xl + горизонтальные отступы Tailwind) */
+.layout-container {
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .layout-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .layout-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Высота строки шапки (в Tailwind v3 нет md:h-18) */
+.nav-shell {
+  height: 4rem;
+}
+
+@media (min-width: 768px) {
+  .nav-shell {
+    height: 4.5rem;
+  }
+}
+
+/* Плавающая кнопка Max — тени вынесены из длинных arbitrary-классов */
+.fab-max {
+  box-shadow:
+    0 4px 20px rgba(37, 99, 235, 0.45),
+    0 0 28px rgba(59, 130, 246, 0.5);
+}
+
+.fab-max:hover {
+  box-shadow:
+    0 6px 28px rgba(37, 99, 235, 0.55),
+    0 0 36px rgba(59, 130, 246, 0.65);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  font-family: 'Manrope', system-ui, sans-serif;
+}
+
+/* Вордмарк в шапке (отдельный шрифт, как на логотипе) */
+.site-wordmark {
+  font-family: 'Plus Jakarta Sans', 'Manrope', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 1.375rem;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: baseline;
+  transition: filter 0.2s ease;
+}
+
+.site-wordmark:hover,
+.site-wordmark:focus-visible {
+  filter: brightness(1.06);
+}
+
+.site-wordmark__core {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.02em;
+}
+
+.site-wordmark__name {
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  background: linear-gradient(115deg, #1d4ed8 0%, #1e3a8a 55%, #172554 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: #1e3a8a;
+}
+
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .site-wordmark__name {
+    color: transparent;
+  }
+}
+
+/* Суффикс .pro — отдельный акцент (не смешивается с градиентом основы) */
+.site-wordmark__tld {
+  font-weight: 800;
+  font-size: 0.94em;
+  letter-spacing: 0.02em;
+  color: #2563eb;
+  transition: color 0.2s ease;
+}
+
+.site-wordmark:hover .site-wordmark__tld,
+.site-wordmark:focus-visible .site-wordmark__tld {
+  color: #1d4ed8;
+}
+
+/* Убирает серую «вспышку»/затемнение при тапе по ссылкам и кнопкам (iOS/Android) */
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Скрытие полосы прокрутки галереи */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Секция цен: прямоугольные карточки (.price-block в разметке) */
+.price-block .price-group h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.price-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.price-table th,
+.price-table td {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: top;
+}
+
+.price-table th {
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+}
+
+.price-table td:last-child {
+  text-align: right;
+  font-weight: 600;
+  color: #1d4ed8;
+  padding-left: 1rem;
+}
+
+.price-table caption {
+  caption-side: top;
+  text-align: left;
+  padding: 0;
+}
+
+/* Скрытие стрелки галереи на краю */
+.gallery-nav-hidden {
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Отзывы: плавная прокрутка справа налево */
+.reviews-marquee {
+  overflow-x: hidden;
+  overflow-y: visible;
+  width: 100%;
+  padding-bottom: 1.25rem;
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.reviews-track {
+  display: flex;
+  width: max-content;
+  gap: 2rem;
+  animation: reviews-marquee 42s linear infinite;
+}
+
+.reviews-marquee:hover .reviews-track {
+  animation-play-state: paused;
+}
+
+@keyframes reviews-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reviews-track {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 72rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 1rem;
+  }
+
+  .reviews-track .review-card:nth-child(n + 6) {
+    display: none;
+  }
+
+  .review-card {
+    width: 100%;
+    max-width: 28rem;
+  }
+}
