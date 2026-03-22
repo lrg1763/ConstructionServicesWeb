@@ -5,10 +5,15 @@ const iconOpen = document.getElementById('menu-icon-open');
 const iconClose = document.getElementById('menu-icon-close');
 const navLinks = document.querySelectorAll('.nav-link');
 
+function setMenuOpen(open) {
+  menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
 menuToggle.addEventListener('click', function() {
   mobileMenu.classList.toggle('hidden');
   iconOpen.classList.toggle('hidden');
   iconClose.classList.toggle('hidden');
+  setMenuOpen(!mobileMenu.classList.contains('hidden'));
 });
 
 navLinks.forEach(function(link) {
@@ -16,6 +21,7 @@ navLinks.forEach(function(link) {
     mobileMenu.classList.add('hidden');
     iconOpen.classList.remove('hidden');
     iconClose.classList.add('hidden');
+    setMenuOpen(false);
   });
 });
 
@@ -63,6 +69,13 @@ if (galleryScroll && galleryPrev && galleryNext) {
   });
 
   galleryScroll.addEventListener('scroll', updateGalleryArrows);
+
+  let resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(updateGalleryArrows, 150);
+  });
+
   galleryScroll.addEventListener('keydown', function(e) {
     if (e.key === 'ArrowLeft') {
       e.preventDefault();
